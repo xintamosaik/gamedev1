@@ -37,12 +37,17 @@ class VelocityComponent {
     }
 }
 
+class RenderComponent {
+    constructor(color) {
+        this.color = color;
+    }
+}
 class MovementSystem {
     update(entities, delta) {
         entities.forEach(entity => {
             const position = entity.getComponent('position');
             const velocity = entity.getComponent('velocity');
-            
+
             if (position && velocity) {
                 position.x += velocity.vx * delta;
                 position.y += velocity.vy * delta;
@@ -51,29 +56,64 @@ class MovementSystem {
     }
 }
 
+class InputSystem {
+    constructor() {
+        this.keys = {};
+        window.addEventListener('keydown', (e) => this.keys[e.key] = true);
+        window.addEventListener('keyup', (e) => this.keys[e.key] = false);
+    }
+
+    update(entities) {
+        entities.forEach(entity => {
+            const velocity = entity.getComponent('velocity');
+            if (velocity) {
+                if (this.keys['ArrowUp']) velocity.vy = -1;
+                if (this.keys['ArrowDown']) velocity.vy = 1;
+                if (this.keys['ArrowLeft']) velocity.vx = -1;
+                if (this.keys['ArrowRight']) velocity.vx = 1;
+            }
+        });
+    }
+}
+class RenderSystem {
+    constructor(context) {
+        this.context = context;
+    }
+
+    update(entities) {
+        this.context.clearRect(0, 0, canvas.width, canvas.height);
+        entities.forEach(entity => {
+            const position = entity.getComponent('position');
+            const render = entity.getComponent('render');
+
+            if (position && render) {
+                this.context.fillStyle = render.color;
+                this.context.fillRect(position.x, position.y, 50, 50);
+            }
+        });
+    }
+}
 // Create an entity and add components
 let player = new Entity(1);
 player.addComponent('position', new PositionComponent(0, 0));
 player.addComponent('velocity', new VelocityComponent(1, 1));
+
 let entities = [player];
 let movementSystem = new MovementSystem();
+let inputSystem = new InputSystem();
+let renderSystem = new RenderSystem(context);
 
 function gameLoop(timestamp) {
     delta = (timestamp - last) / 1000;
     last = timestamp
-    
-    movementSystem.update(entities, delta);
+
+
     context.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // Render entities
-    entities.forEach(entity => {
-        const position = entity.getComponent('position');
-        if (position) {
-            console.log(`Entity ${entity.id} Position: (${position.x}, ${position.y})`);
-                context.fillStyle = '#ff8080';
-                context.fillRect(position.x, position.y, 40, 40);
-        }
-    });
+
+    inputSystem.update(entities);
+    movementSystem.update(entities, delta);
+    renderSystem.update(entities);
+
     window.requestAnimationFrame(gameLoop);
 }
 window.requestAnimationFrame(gameLoop);
