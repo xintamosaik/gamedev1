@@ -11,19 +11,25 @@ export interface Entity {
     };
 }
 
-// Constrain `T` to be one of the component types
-export function addComponent<T extends Position | Velocity | Render>(
+export function createEntity(id: number): Entity {
+    return {
+        id,
+        components: {}
+    };
+}
+// Use K to represent the specific key being passed in
+export function addComponent<K extends keyof Entity['components']>(
     entity: Entity,
-    name: keyof Entity['components'],
-    component: T
+    name: K,
+    // This ensures the component matches the type defined for that key in the interface
+    component: Entity['components'][K]
 ): void {
     entity.components[name] = component;
 }
 
-// `T` must extend one of the component types
-export function getComponent<T extends Position | Velocity | Render>(
+export function getComponent<K extends keyof Entity['components']>(
     entity: Entity,
-    name: keyof Entity['components']
-): T | undefined {
-    return entity.components[name] as T;
+    name: K
+): Entity['components'][K] {
+    return entity.components[name];
 }
