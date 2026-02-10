@@ -97,7 +97,7 @@ class RenderSystem {
 let player = new Entity(1);
 player.addComponent('position', new PositionComponent(0, 0));
 player.addComponent('velocity', new VelocityComponent(1, 1));
-
+player.addComponent('render', new RenderComponent('#ff8080'));
 let entities = [player];
 let movementSystem = new MovementSystem();
 let inputSystem = new InputSystem();
@@ -106,14 +106,19 @@ let renderSystem = new RenderSystem(context);
 function gameLoop(timestamp) {
     delta = (timestamp - last) / 1000;
     last = timestamp
-
+    fps = Math.round(1 / delta);
 
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     inputSystem.update(entities);
     movementSystem.update(entities, delta);
     renderSystem.update(entities);
-
+   // Display FPS on screen
+    context.fillStyle = 'white';
+    context.fillRect(0, 0, 50, 20);
+    context.font = '12px Arial';
+    context.fillStyle = 'black';
+    context.fillText(`FPS: ${fps}`, 4, 15);
     window.requestAnimationFrame(gameLoop);
 }
 window.requestAnimationFrame(gameLoop);
