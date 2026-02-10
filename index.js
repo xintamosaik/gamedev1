@@ -4,8 +4,6 @@ let delta = 0;
 let last = 0;
 let fps;
 let speed = 50;
-let rectX = 0.0;
-let rectY = 0.0;
 
 class Entity {
     constructor(id) {
@@ -46,7 +44,7 @@ class MovementSystem {
         entities.forEach(entity => {
             const position = entity.getComponent('position');
             const velocity = entity.getComponent('velocity');
-
+   
             if (position && velocity) {
                 position.x += velocity.vx * speed * delta;
                 position.y += velocity.vy * speed * delta;
@@ -66,6 +64,8 @@ class InputSystem {
         entities.forEach(entity => {
             const velocity = entity.getComponent('velocity');
             if (velocity) {
+                velocity.vx = 0;
+                velocity.vy = 0;
                 if (this.keys['ArrowUp']) velocity.vy = -1;
                 if (this.keys['ArrowDown']) velocity.vy = 1;
                 if (this.keys['ArrowLeft']) velocity.vx = -1;
@@ -93,7 +93,6 @@ class RenderSystem {
     }
 }
 
-// Create an entity and add components
 let player = new Entity(1);
 player.addComponent('position', new PositionComponent(100, 100));
 player.addComponent('velocity', new VelocityComponent(0, 0));
@@ -109,11 +108,9 @@ function gameLoop(timestamp) {
     last = timestamp;
     fps = Math.round(1 / delta);
     
- 
     inputSystem.update(entities);
     movementSystem.update(entities, delta);
     renderSystem.update(entities);
-    // Display FPS on screen
     context.fillStyle = 'white';
     context.fillRect(0, 0, 200, 50);
     context.font = '20px Arial';
