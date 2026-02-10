@@ -44,8 +44,14 @@ const tree = {
     render: { color: '#2ecc71' }
 };
 
-const entities = [player, tree];
+const entities = [ tree, player];
+window.addEventListener('keydown', (e) => {
+    keys[e.key] = true;
+});
 
+window.addEventListener('keyup', (e) => {
+    keys[e.key] = false;
+});
 function updateInputLogic(velocity: Velocity): void {
     velocity.vx = 0;
     velocity.vy = 0;
@@ -83,14 +89,14 @@ function gameLoop(timestamp: number): void {
     const delta = (timestamp - last) / 1000;
     last = timestamp;
     updateInputLogic(player.velocity);
-    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = "black";
+     context.fillRect(0, 0, canvas.width, canvas.height);
     for (const entity of entities) {
 
         if (isMovable(entity)) {
             move(entity.position, entity.velocity, delta, speed);
         }
 
-        // We are asking: "Does this have the Renderable trait?"
         if (isRenderable(entity)) {
             render(entity.position, entity.render);
         }
