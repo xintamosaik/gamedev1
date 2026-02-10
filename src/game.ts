@@ -8,9 +8,7 @@ type Position = {
     x: number;
     y: number;
 }
-type Render = {
-    color: string;
-}
+
 type Velocity = {
     vx: number;
     vy: number;
@@ -19,15 +17,23 @@ interface Movable {
     position: Position;
     velocity: Velocity;
 }
-
+function isMovable(entity: any): entity is Movable {
+    return 'velocity' in entity && 'position' in entity;
+}
+type Render = {
+    color: string;
+}
 interface Renderable {
     position: Position;
     render: Render;
 }
+window.addEventListener('keydown', (e) => {
+    keys[e.key] = true;
+});
 
-function isMovable(entity: any): entity is Movable {
-    return 'velocity' in entity && 'position' in entity;
-}
+window.addEventListener('keyup', (e) => {
+    keys[e.key] = false;
+});
 
 function isRenderable(entity: any): entity is Renderable {
     return 'render' in entity && 'position' in entity;
@@ -49,14 +55,8 @@ const grass = {
 };
 
 
-const entities = [ grass, tree, player];
-window.addEventListener('keydown', (e) => {
-    keys[e.key] = true;
-});
+const entities = [grass, tree, player];
 
-window.addEventListener('keyup', (e) => {
-    keys[e.key] = false;
-});
 function updateInputLogic(velocity: Velocity): void {
     velocity.vx = 0;
     velocity.vy = 0;
@@ -95,7 +95,7 @@ function gameLoop(timestamp: number): void {
     last = timestamp;
     updateInputLogic(player.velocity);
     context.fillStyle = "black";
-     context.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillRect(0, 0, canvas.width, canvas.height);
     for (const entity of entities) {
 
         if (isMovable(entity)) {
