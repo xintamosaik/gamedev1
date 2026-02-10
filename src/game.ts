@@ -9,7 +9,6 @@ let last = 0;
 const speed = 50;
 
 const player = {
-    id: 1,
     position: { x: 100, y: 100 },
     velocity: { vx: 0, vy: 0 },
     render: { color: '#ff8080' }
@@ -24,6 +23,7 @@ function gameLoop(timestamp: number): void {
 
     inputSystem([player]); 
     updateMovement(entities, delta, speed); 
+    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
     updateRender(entities, context);
 
     context.fillStyle = 'black';
