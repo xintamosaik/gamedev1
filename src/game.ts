@@ -38,13 +38,18 @@ const player = {
     render: { color: '#ff8080' }
 };
 
-
 const tree = {
     position: { x: 300, y: 200 },
     render: { color: '#2ecc71' }
 };
 
-const entities = [ tree, player];
+const grass = {
+    position: { x: 200, y: 100 },
+    render: { color: '#6dd072' }
+};
+
+
+const entities = [ grass, tree, player];
 window.addEventListener('keydown', (e) => {
     keys[e.key] = true;
 });
