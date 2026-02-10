@@ -1,15 +1,13 @@
-import { Entity } from "entities/entity";
-import { Position } from "components/position";
-import { Velocity } from "components/velocity";
+interface Movable {
+    position: { x: number; y: number };
+    velocity: { vx: number; vy: number };
+}
 
-export function updateMovement(entities: Entity[], delta: number, speed: number): void {
+export function updateMovement(entities: Movable[], delta: number, speed: number): void {
     entities.forEach(entity => {
-        const position = entity.components['position'] as Position;
-        const velocity = entity.components['velocity'] as Velocity;
-
-        if (position && velocity) {
-            position.x += velocity.vx * speed * delta;
-            position.y += velocity.vy * speed * delta;
-        }
+        // No .components, no casting, no 'if' checks needed!
+        // TypeScript guarantees these exist because of the Movable interface.
+        entity.position.x += entity.velocity.vx * speed * delta;
+        entity.position.y += entity.velocity.vy * speed * delta;
     });
 }
