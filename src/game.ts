@@ -3,7 +3,8 @@ import { createThing, registerThing } from './things';
 import { updateInputLogic } from './input';
 import { updateMovement } from './movement';
 import { canvas, context, renderAll } from './render';
-import world from './levels/one';
+import levelOne from './levels/one';
+import { Background } from 'levels/types';
 
 
 let last = 0;
@@ -23,16 +24,23 @@ const player: Player = createThing(
         render: { color: '#ff8080' }
     }
 );
+function drawBackground(bg: Background) {
+  if (bg.kind === 'solid') {
+    context.fillStyle = bg.color;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+  }
+}
+
 registerThing(player);
-loadLevel(world);
+loadLevel(levelOne.statics);
+let currentLevel = levelOne;
 
 function gameLoop(timestamp: number): void {
-    const delta = (timestamp - last) / 1000;
-    last = timestamp;
+
+    const delta = Math.min((timestamp - last) / 1000, 0.05); // max 50ms step
     updateInputLogic(player.velocity);
 
-    context.fillStyle = 'black';
-    context.fillRect(0, 0, canvas.width, canvas.height);
+    drawBackground(currentLevel.background);
 
     updateMovement(delta, speed);
     renderAll();
