@@ -8,9 +8,7 @@ import world from './levels/one';
 
 let last = 0;
 const speed = 50;
-function load(description: Static | Player) {
-      
-}
+
 function loadLevel(descriptions: Static[]) {
     for (const description of descriptions) {
         const thing = createThing(description);
@@ -31,7 +29,7 @@ loadLevel(world);
 function gameLoop(timestamp: number): void {
     const delta = (timestamp - last) / 1000;
     last = timestamp;
-    updateInputLogic(player.velocity!);
+    updateInputLogic(player.velocity);
 
     context.fillStyle = 'black';
     context.fillRect(0, 0, canvas.width, canvas.height);
