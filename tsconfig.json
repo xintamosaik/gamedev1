@@ -5,8 +5,8 @@
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
-        "baseUrl": "./src",  // Set baseUrl here
-    "outDir": "./dist", // This is optional as esbuild handles output
+    "baseUrl": "./src",
+    "outDir": "./dist",
     "allowJs": true,
     "sourceMap": true
   },
