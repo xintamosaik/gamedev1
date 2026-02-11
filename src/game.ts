@@ -38,16 +38,6 @@ window.addEventListener('keyup', (e) => {
 function isRenderable(entity: any): entity is Renderable {
     return 'render' in entity && 'position' in entity;
 }
-const player = {
-    position: { x: 100, y: 100 },
-    velocity: { vx: 0, vy: 0 },
-    render: { color: '#ff8080' }
-};
-
-const tree = {
-    position: { x: 300, y: 200 },
-    render: { color: '#2ecc71' }
-};
 
 const grass = {
     position: { x: 200, y: 100 },
@@ -55,8 +45,33 @@ const grass = {
 };
 
 
-const entities = [grass, tree, player];
 
+type EntityId = number;
+
+let nextEntityId = 0;
+
+function createEntity<T extends object>(entity: T): T & { id: EntityId } {
+    return { ...entity, id: nextEntityId++ };
+}
+function registerEntity(entity: any) {
+    if (isMovable(entity)) movables.push(entity);
+    if (isRenderable(entity)) renderables.push(entity);
+}
+const player = createEntity({
+    position: { x: 100, y: 100 },
+    velocity: { vx: 0, vy: 0 },
+    render: { color: '#ff8080' }
+});
+
+const tree = createEntity({
+    position: { x: 300, y: 200 },
+    render: { color: '#2ecc71' }
+});
+
+const movables: Movable[] = [];
+const renderables: Renderable[] = [];
+registerEntity(player);
+registerEntity(tree);
 function updateInputLogic(velocity: Velocity): void {
     velocity.vx = 0;
     velocity.vy = 0;
@@ -96,16 +111,17 @@ function gameLoop(timestamp: number): void {
     updateInputLogic(player.velocity);
     context.fillStyle = "black";
     context.fillRect(0, 0, canvas.width, canvas.height);
-    for (const entity of entities) {
 
-        if (isMovable(entity)) {
-            move(entity.position, entity.velocity, delta, speed);
-        }
 
-        if (isRenderable(entity)) {
-            render(entity.position, entity.render);
-        }
+    for (const entity of movables) {
+        move(entity.position, entity.velocity, delta, speed);
     }
+
+
+    for (const entity of renderables) {
+        render(entity.position, entity.render);
+    }
+
     context.fillStyle = 'black';
     context.fillText(`FPS: ${Math.round(1 / delta)}`, 10, 30);
 
