@@ -11,3 +11,14 @@ export type Velocity = {
 export type Render = {
     color: string;
 }
+
+export type Static = {
+    position: Position;
+    render?: Render;
+};
+
+export type Player = {
+    position: Position;
+    render?: Render;
+    velocity?: Velocity;
+};
