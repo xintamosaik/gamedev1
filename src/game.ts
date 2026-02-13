@@ -45,7 +45,7 @@ function gameLoop(timestamp: number): void {
     updateMovement(delta, speed);
     renderAll();
 
-    context.fillStyle = 'black';
+    context.fillStyle = '#0f0';
     context.fillText(`FPS: ${Math.round(1 / delta)}`, 10, 30);
 
     window.requestAnimationFrame(gameLoop);
