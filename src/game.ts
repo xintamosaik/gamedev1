@@ -79,7 +79,7 @@ function gameLoop(timestamp: number): void {
     const near = checkProximity(player.position, player.dimensions, player.aura);
     player.render.color = near.length > 0 ? '#ff0' : player.render.color;
     drawBackground(activeLevel.background);
-    renderAll();
+    renderAll(near, collisions);
 
     context.fillStyle = '#0f0';
     context.fillText(`FPS: ${Math.round(1 / deltaTime)}`, 10, 30);

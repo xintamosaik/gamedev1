@@ -21,9 +21,16 @@ export function registerRenderable(thing: Renderable) {
     renderables.push(thing);
 }
 
-export function renderAll() {
+export function renderAll(near: any[], collisions: any[]) {
   for (const e of renderables) {
-    context.fillStyle = e.render.color;
+    let color = e.render.color;
+    if (near.includes(e)) {
+      color = '#ff0';
+    }
+    if (collisions.includes(e)) {
+      color = '#f00';
+    }
+    context.fillStyle = color;
     context.fillRect(e.position.x, e.position.y, e.dimensions.w, e.dimensions.h);
   }
 }
