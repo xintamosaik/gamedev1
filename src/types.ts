@@ -1,5 +1,7 @@
 export type ID = number;
-
+export type Thing = {
+  id: ID;
+};
 export type Position = {
     x: number;
     y: number;

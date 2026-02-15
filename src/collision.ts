@@ -1,6 +1,6 @@
-import type { Position, Dimensions } from './types';
+import type { Position, Dimensions, Thing } from './types';
 
-export interface Collidable {
+export interface Collidable extends Thing {
   position: Position;
   dimensions: Dimensions;
   solid?: boolean;
