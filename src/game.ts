@@ -1,4 +1,4 @@
-import type { Static, Player } from './types';
+import type { Render, Position, Velocity, Thing } from './types';
 import { createThing, registerThing } from './things';
 import { updateInputLogic } from './input';
 import { updateMovement } from './movement';
@@ -11,11 +11,17 @@ let previousFrameTime = 0;
 const MAX_DELTA_TIME = 0.05;
 const MOVEMENT_SCALE = 200; // max 50ms step
 
-function createLevel(descriptions: Static[]) {
+function createLevel(descriptions: Thing[]) {
     for (const description of descriptions) {
         const thing = createThing(description);
         registerThing(thing);
     }
+}
+type Player = {
+    id: number,
+    render: Render,
+    velocity: Velocity,
+    position: Position,
 }
 
 const player: Player = createThing(

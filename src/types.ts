@@ -12,13 +12,9 @@ export type Render = {
     color: string;
 }
 
-export type Static = {
-    position: Position;
-    render: Render;
-};
-
-export type Player = {
-    position: Position;
-    render: Render;
-    velocity: Velocity;
+export type Thing = {
+    id: number,
+    position?: Position;
+    render?: Render;
+    velocity?: Velocity;
 };
