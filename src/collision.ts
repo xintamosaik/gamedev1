@@ -1,35 +1,33 @@
-// src/collision.ts
 import type { Position, Dimensions } from './types';
 
-export interface Solid {
+export interface Collidable {
   position: Position;
   dimensions: Dimensions;
-  solid?: boolean; // allow implicit / future defaults
+  solid?: boolean; 
 }
 
-const solids: Solid[] = [];
+const solids: Collidable[] = [];
 
-function isSolid(thing: unknown): thing is Solid {
+function isCollidable(thing: unknown): thing is Collidable {
   return (
     typeof thing === 'object' &&
     thing !== null &&
     'position' in thing &&
     'dimensions' in thing &&
-    // "solid" is optional, but if it exists it must be truthy to register
     (!('solid' in thing) || Boolean((thing as any).solid))
   );
 }
 
 export function registerSolid(thing: unknown) {
-  if (isSolid(thing)) {
-    // only register if solid is true or missing (you can tighten this later)
+  if (isCollidable(thing)) {
+
     if (!('solid' in thing) || (thing as any).solid === true) {
       solids.push(thing);
     }
   }
 }
 
-export function getSolids(): readonly Solid[] {
+export function getSolids(): readonly Collidable[] {
   return solids;
 }
 
