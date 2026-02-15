@@ -13,6 +13,17 @@ import { isSolid, registerSolid } from 'collision';
 let previousFrameTime = 0;
 const MAX_DELTA_TIME = 0.05;
 const MOVEMENT_SCALE = 200; // max 50ms step
+
+const player =   {
+        id: ID(),
+        position: { x: 100, y: 100 },
+        dimensions: { w: 50, h: 50 },
+        velocity: { vx: 0, vy: 0 },
+        render: { color: '#d5a442' }
+}
+registerMovable(player);
+registerRenderable(player);
+
 function isRecord(x: unknown): x is Record<string, unknown> {
   return typeof x === 'object' && x !== null;
 }
@@ -30,16 +41,8 @@ function createLevel(descriptions: unknown[]) {
    
     }
 }
-
-const player =   {
-        id: ID(),
-        position: { x: 100, y: 100 },
-        dimensions: { w: 50, h: 50 },
-        velocity: { vx: 0, vy: 0 },
-        render: { color: '#d5a442' }
-}
-registerMovable(player);
-registerRenderable(player);
+createLevel(levelOne.statics);
+let activeLevel = levelOne;
 
 function drawBackground(bg: Background) {
     if (bg.color ) {
@@ -49,9 +52,6 @@ function drawBackground(bg: Background) {
 }
 
 
-createLevel(levelOne.statics);
-
-let activeLevel = levelOne;
 
 function gameLoop(timestamp: number): void {
 
