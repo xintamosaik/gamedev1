@@ -1,16 +1,14 @@
-import { Static, Player } from './types';
+import { Thing } from './types';
 import { registerMovable } from './movement';
 import { registerRenderable } from './render';
-export type ThingId = number;
 
-let nextThingId = 0;
+let iterating = 0;
 
-
-export function createThing<T extends object>(thing: T): T & { id: ThingId } {
-    return { ...thing, id: nextThingId++ };
+export function createThing( thing: object ) {
+    return { ...thing, id: iterating++ };
 }
 
-export function registerThing<T extends Static | Player>(thing: T): void {
+export function registerThing(thing: Thing): void {
     registerMovable(thing);
     registerRenderable(thing);
 }
