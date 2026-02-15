@@ -17,23 +17,13 @@ function createLevel(descriptions: object[]) {
     }
 }
 
-type Player = {
-    id: number,
-    render: Render,
-    dimensions: Dimensions,
-    velocity: Velocity,
-    position: Position,
-}
-
-const player: Player =   
-    {
+const player =   {
         id: ID(),
         position: { x: 100, y: 100 },
         dimensions: { w: 50, h: 50 },
         velocity: { vx: 0, vy: 0 },
         render: { color: '#d5a442' }
-    }
-
+}
 
 function drawBackground(bg: Background) {
     if (bg.color ) {
