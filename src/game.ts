@@ -1,5 +1,5 @@
 import type { Render, Position, Velocity, Dimensions } from './types';
-import { createThing, registerThing } from './things';
+import { ID, registerThing } from './things';
 import { updateInputLogic } from './input';
 import { updateMovement } from './movement';
 import { canvas, context, renderAll } from './render';
@@ -12,7 +12,7 @@ const MOVEMENT_SCALE = 200; // max 50ms step
 
 function createLevel(descriptions: object[]) {
     for (const description of descriptions) {
-        const thing = createThing(description);
+        const thing = { ...description, id: ID()} 
         registerThing(thing);
     }
 }
@@ -25,14 +25,15 @@ type Player = {
     position: Position,
 }
 
-const player: Player = createThing(
+const player: Player =   
     {
+        id: ID(),
         position: { x: 100, y: 100 },
         dimensions: { w: 50, h: 50 },
         velocity: { vx: 0, vy: 0 },
         render: { color: '#d5a442' }
     }
-);
+
 
 function drawBackground(bg: Background) {
     if (bg.kind === 'solid') {
