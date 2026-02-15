@@ -42,11 +42,11 @@ function gameLoop(timestamp: number): void {
         (timestamp - previousFrameTime) / 1000, 
         MAX_DELTA_TIME
     ); 
+
     updateInputLogic(player.velocity);
-
-    drawBackground(activeLevel.background);
-
     updateMovement(deltaTime, MOVEMENT_SCALE);
+    
+    drawBackground(activeLevel.background);
     renderAll();
 
     context.fillStyle = '#0f0';
