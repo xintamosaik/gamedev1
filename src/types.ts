@@ -11,10 +11,9 @@ export type Velocity = {
 export type Render = {
     color: string;
 }
+export type ID = number;
 
 export type Thing = {
-    id: number,
-    position?: Position;
-    render?: Render;
-    velocity?: Velocity;
+    id: ID,
 };
+
