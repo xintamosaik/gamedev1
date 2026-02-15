@@ -1,11 +1,14 @@
 import type { Render, Position, Velocity, Dimensions } from './types';
-import { ID, registerThing } from './things';
+import { ID } from './things';
 import { updateInputLogic } from './input';
 import { updateMovement } from './movement';
 import { canvas, context, renderAll } from './render';
 import levelOne from './levels/one';
 import { Background } from 'levels/types';
 import { checkCollisions } from 'collision';
+import { registerMovable } from './movement';
+import { registerRenderable } from './render';
+import { registerSolid } from 'collision';
 
 let previousFrameTime = 0;
 const MAX_DELTA_TIME = 0.05;
@@ -14,7 +17,11 @@ const MOVEMENT_SCALE = 200; // max 50ms step
 function createLevel(descriptions: object[]) {
     for (const description of descriptions) {
         const thing = { ...description, id: ID()} 
-        registerThing(thing);
+        
+        registerMovable(thing);
+        registerRenderable(thing);
+        registerSolid(thing);
+   
     }
 }
 
@@ -25,6 +32,8 @@ const player =   {
         velocity: { vx: 0, vy: 0 },
         render: { color: '#d5a442' }
 }
+registerMovable(player);
+registerRenderable(player);
 
 function drawBackground(bg: Background) {
     if (bg.color ) {
@@ -33,7 +42,6 @@ function drawBackground(bg: Background) {
     }
 }
 
-registerThing(player);
 
 createLevel(levelOne.statics);
 
@@ -49,7 +57,12 @@ function gameLoop(timestamp: number): void {
     updateInputLogic(player.velocity);
 
     updateMovement(deltaTime, MOVEMENT_SCALE);
-    console.log(checkCollisions(player.position, player.dimensions));
+    const collisions = checkCollisions(player.position, player.dimensions);
+    if (collisions.length > 0) {
+        player.render.color = '#f00';
+    } else {
+        player.render.color = '#d5a442';
+    }
     drawBackground(activeLevel.background);
     renderAll();
 
