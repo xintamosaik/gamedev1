@@ -7,10 +7,11 @@ import levelOne from './levels/one';
 import { Background } from 'levels/types';
 
 
-let last = 0;
-const speed = 50;
+let previousFrameTime = 0;
+const MAX_DELTA_TIME = 0.05;
+const MOVEMENT_SCALE = 200; // max 50ms step
 
-function loadLevel(descriptions: Static[]) {
+function createLevel(descriptions: Static[]) {
     for (const description of descriptions) {
         const thing = createThing(description);
         registerThing(thing);
@@ -25,29 +26,33 @@ const player: Player = createThing(
     }
 );
 function drawBackground(bg: Background) {
-  if (bg.kind === 'solid') {
-    context.fillStyle = bg.color;
-    context.fillRect(0, 0, canvas.width, canvas.height);
-  }
+    if (bg.kind === 'solid') {
+        context.fillStyle = bg.color;
+        context.fillRect(0, 0, canvas.width, canvas.height);
+    }
 }
 
 registerThing(player);
-loadLevel(levelOne.statics);
-let currentLevel = levelOne;
+createLevel(levelOne.statics);
+let activeLevel = levelOne;
 
 function gameLoop(timestamp: number): void {
 
-    const delta = Math.min((timestamp - last) / 1000, 0.05); // max 50ms step
+    const deltaTime = Math.min(
+        (timestamp - previousFrameTime) / 1000, 
+        MAX_DELTA_TIME
+    ); 
     updateInputLogic(player.velocity);
 
-    drawBackground(currentLevel.background);
+    drawBackground(activeLevel.background);
 
-    updateMovement(delta, speed);
+    updateMovement(deltaTime, MOVEMENT_SCALE);
     renderAll();
 
     context.fillStyle = '#0f0';
-    context.fillText(`FPS: ${Math.round(1 / delta)}`, 10, 30);
-
+    context.fillText(`FPS: ${Math.round(1 / deltaTime)}`, 10, 30);
+    
+    previousFrameTime = timestamp;
     window.requestAnimationFrame(gameLoop);
 }
 
