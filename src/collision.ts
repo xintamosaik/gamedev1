@@ -1,17 +1,19 @@
 import type { Position, Dimensions } from './types';
 
-export interface Collidable {
+export interface HasAabb {
   position: Position;
   dimensions: Dimensions;
   solid?: boolean;
 }
-export type Solid = Collidable & { solid: true };
+export type Solid = HasAabb & { solid: true };
 const solids: Solid[] = [];
 
 export function isSolid(thing: unknown): thing is Solid {
-  if (typeof thing !== 'object' || thing === null) return false;
-  if (!('position' in thing) || !('dimensions' in thing)) return false;
-  return (thing as any).solid === true;
+  return typeof thing === 'object'
+    && thing !== null
+    && 'position' in thing
+    && 'dimensions' in thing
+    && (thing as any).solid === true;
 }
 
 export function registerSolid(thing: Solid) {
