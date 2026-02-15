@@ -1,4 +1,4 @@
-import { Position, Render } from './types';
+import { Position, Render, Dimensions } from './types';
 
 export const canvas = document.getElementById('game') as HTMLCanvasElement;
 export const context = canvas.getContext('2d')!;
@@ -6,6 +6,7 @@ const renderables: Renderable[] = [];
 
 export interface Renderable {
     position: Position;
+    dimensions: Dimensions,
     render: Render;
 }
 function isRenderable(thing: unknown): thing is Renderable {
@@ -13,7 +14,8 @@ function isRenderable(thing: unknown): thing is Renderable {
         typeof thing === 'object' &&
         thing !== null &&
         'position' in thing &&
-        'render' in thing
+        'render' in thing &&
+        'dimensions' in thing
     );
 }
 export function registerRenderable(thing: unknown) {
@@ -25,6 +27,6 @@ export function registerRenderable(thing: unknown) {
 export function renderAll() {
     for (const e of renderables) {
         context.fillStyle = e.render.color;
-        context.fillRect(e.position.x, e.position.y, 50, 50);
+        context.fillRect(e.position.x, e.position.y, e.dimensions.w, e.dimensions.h);
     }
 }

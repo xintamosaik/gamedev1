@@ -7,5 +7,5 @@ export const tree = {
 export const bush = {
     position: { x: 300, y: 200 },
     dimensions: { w: 40, h: 40 },
-    render: { color: '#47734c' /*, w: 50, h: 50 */ },
+    render: { color: '#47734c' },
 }
