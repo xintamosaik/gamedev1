@@ -17,8 +17,7 @@ const MOVEMENT_SCALE = 200; // max 50ms step
 function createLevel(descriptions: object[]) {
     for (const description of descriptions) {
         const thing = { ...description, id: ID()} 
-        
-        registerMovable(thing);
+  
         registerRenderable(thing);
         registerSolid(thing);
    
@@ -55,13 +54,13 @@ function gameLoop(timestamp: number): void {
     ); 
 
     updateInputLogic(player.velocity);
-
     updateMovement(deltaTime, MOVEMENT_SCALE);
+  
     const collisions = checkCollisions(player.position, player.dimensions);
     if (collisions.length > 0) {
         player.render.color = '#f00';
     } else {
-        player.render.color = '#d5a442';
+        player.render.color = '#d5a442';     
     }
     drawBackground(activeLevel.background);
     renderAll();

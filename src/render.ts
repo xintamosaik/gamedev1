@@ -11,19 +11,8 @@ export interface Renderable {
 
 const renderables: Renderable[] = [];
 
-function isRenderable(thing: unknown): thing is Renderable {
-    return (
-        typeof thing === 'object' &&
-        thing !== null &&
-        'position' in thing &&
-        'render' in thing &&
-        'dimensions' in thing
-    );
-}
-export function registerRenderable(thing: unknown) {
-    if (isRenderable(thing)) {
-        renderables.push(thing);
-    }
+export function registerRenderable(thing: Renderable) {
+    renderables.push(thing);
 }
 
 export function renderAll() {
