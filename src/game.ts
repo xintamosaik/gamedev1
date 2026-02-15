@@ -49,7 +49,7 @@ function gameLoop(timestamp: number): void {
     updateInputLogic(player.velocity);
 
     updateMovement(deltaTime, MOVEMENT_SCALE);
-    checkCollisions(player.position, player.dimensions);
+    console.log(checkCollisions(player.position, player.dimensions));
     drawBackground(activeLevel.background);
     renderAll();
 

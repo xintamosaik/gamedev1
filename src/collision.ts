@@ -44,14 +44,16 @@ export function aabbIntersects(
   );
 }
 export function checkCollisions(position: Position, dimensions: Dimensions) {
+  const collidedSolids = [];
   const solids = getSolids();
   for (const solid of solids) {
     if (aabbIntersects(
       position.x, position.y, dimensions.w, dimensions.h,
       solid.position.x, solid.position.y, solid.dimensions.w, solid.dimensions.h
     )) {
-      console.log('Collision detected with solid at', solid.position);
-      // Handle collision response here (e.g., stop movement, apply damage, etc.)
+      collidedSolids.push(solid);
     }
+ 
   }
+  return collidedSolids;
 }
