@@ -13,9 +13,12 @@ import { isSolid, registerSolid } from 'collision';
 let previousFrameTime = 0;
 const MAX_DELTA_TIME = 0.05;
 const MOVEMENT_SCALE = 200; // max 50ms step
-
-function createLevel(descriptions: object[]) {
+function isRecord(x: unknown): x is Record<string, unknown> {
+  return typeof x === 'object' && x !== null;
+}
+function createLevel(descriptions: unknown[]) {
     for (const description of descriptions) {
+        if (!isRecord(description)) continue;
         const thing = { ...description, id: ID()} 
   
         if (isRenderable(thing)) {

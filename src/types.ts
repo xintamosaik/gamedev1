@@ -14,10 +14,6 @@ export type Velocity = {
     vy: number;
 }
 
-export type Solid = {
-    solid: boolean;
-}
-
 export type Render = {
     color: string;
 }
