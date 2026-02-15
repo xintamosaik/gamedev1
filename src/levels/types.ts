@@ -1,4 +1,3 @@
-import type { Thing } from 'types';
 
 export type Background =
   | { kind: 'solid'; color: string }
@@ -6,5 +5,5 @@ export type Background =
 
 export type Level = {
   background: Background;
-  statics: Thing[];
+  statics: Array<object>;
 };

@@ -1,8 +1,18 @@
+export type ID = number;
+
+export type Thing = {
+    id: ID,
+};
+
 export type Position = {
     x: number;
     y: number;
 }
 
+export type Dimensions = {
+    w: number;
+    h: number; 
+}
 export type Velocity = {
     vx: number;
     vy: number;
@@ -11,9 +21,3 @@ export type Velocity = {
 export type Render = {
     color: string;
 }
-export type ID = number;
-
-export type Thing = {
-    id: ID,
-};
-

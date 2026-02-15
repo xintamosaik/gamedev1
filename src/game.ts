@@ -1,4 +1,4 @@
-import type { Render, Position, Velocity, Thing } from './types';
+import type { Render, Position, Velocity, Dimensions } from './types';
 import { createThing, registerThing } from './things';
 import { updateInputLogic } from './input';
 import { updateMovement } from './movement';
@@ -6,20 +6,21 @@ import { canvas, context, renderAll } from './render';
 import levelOne from './levels/one';
 import { Background } from 'levels/types';
 
-
 let previousFrameTime = 0;
 const MAX_DELTA_TIME = 0.05;
 const MOVEMENT_SCALE = 200; // max 50ms step
 
-function createLevel(descriptions: Thing[]) {
+function createLevel(descriptions: object[]) {
     for (const description of descriptions) {
         const thing = createThing(description);
         registerThing(thing);
     }
 }
+
 type Player = {
     id: number,
     render: Render,
+    dimensions: Dimensions,
     velocity: Velocity,
     position: Position,
 }
@@ -27,10 +28,12 @@ type Player = {
 const player: Player = createThing(
     {
         position: { x: 100, y: 100 },
+        dimensions: { w: 50, h: 50 },
         velocity: { vx: 0, vy: 0 },
-        render: { color: '#ff8080' }
+        render: { color: '#d5a442' }
     }
 );
+
 function drawBackground(bg: Background) {
     if (bg.kind === 'solid') {
         context.fillStyle = bg.color;
@@ -39,7 +42,9 @@ function drawBackground(bg: Background) {
 }
 
 registerThing(player);
+
 createLevel(levelOne.statics);
+
 let activeLevel = levelOne;
 
 function gameLoop(timestamp: number): void {
