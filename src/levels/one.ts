@@ -2,7 +2,7 @@
 import { tree, bush } from 'objects/objects';
 import type { Level } from 'levels/types';
 const levelOne: Level = {
-    background: { kind: 'solid', color: '#2c3e50' },
+    background: { color: '#2c3e50' },
     statics: [ tree, bush ],
 };
 

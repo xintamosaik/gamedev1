@@ -36,7 +36,7 @@ const player: Player =
 
 
 function drawBackground(bg: Background) {
-    if (bg.kind === 'solid') {
+    if (bg.color ) {
         context.fillStyle = bg.color;
         context.fillRect(0, 0, canvas.width, canvas.height);
     }

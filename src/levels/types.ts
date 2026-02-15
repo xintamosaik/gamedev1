@@ -1,7 +1,6 @@
 
-export type Background =
-  | { kind: 'solid'; color: string }
-  | { kind: 'none' };
+export type Background = { color: string }
+
 
 export type Level = {
   background: Background;
