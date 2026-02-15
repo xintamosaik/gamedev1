@@ -5,6 +5,7 @@ import { updateMovement } from './movement';
 import { canvas, context, renderAll } from './render';
 import levelOne from './levels/one';
 import { Background } from 'levels/types';
+import { checkCollisions } from 'collision';
 
 let previousFrameTime = 0;
 const MAX_DELTA_TIME = 0.05;
@@ -46,8 +47,9 @@ function gameLoop(timestamp: number): void {
     ); 
 
     updateInputLogic(player.velocity);
+
     updateMovement(deltaTime, MOVEMENT_SCALE);
-    
+    checkCollisions(player.position, player.dimensions);
     drawBackground(activeLevel.background);
     renderAll();
 
