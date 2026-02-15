@@ -7,8 +7,8 @@ import levelOne from './levels/one';
 import { Background } from 'levels/types';
 import { checkCollisions } from 'collision';
 import { registerMovable } from './movement';
-import { registerRenderable } from './render';
-import { registerSolid } from 'collision';
+import { isRenderable, registerRenderable } from './render';
+import { isSolid, registerSolid } from 'collision';
 
 let previousFrameTime = 0;
 const MAX_DELTA_TIME = 0.05;
@@ -18,8 +18,12 @@ function createLevel(descriptions: object[]) {
     for (const description of descriptions) {
         const thing = { ...description, id: ID()} 
   
-        registerRenderable(thing);
-        registerSolid(thing);
+        if (isRenderable(thing)) {
+            registerRenderable(thing);
+        }
+        if (isSolid(thing)) {
+            registerSolid(thing);
+        }
    
     }
 }

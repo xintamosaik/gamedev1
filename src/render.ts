@@ -10,6 +10,12 @@ export interface Renderable {
 }
 
 const renderables: Renderable[] = [];
+export function isRenderable(thing: unknown): thing is Renderable {
+    if (typeof thing !== 'object' || thing === null) return false;
+    if (!('render' in thing)) return false;
+    if (!('position' in thing) || !('dimensions' in thing)) return false;
+    return true;
+}
 
 export function registerRenderable(thing: Renderable) {
     renderables.push(thing);

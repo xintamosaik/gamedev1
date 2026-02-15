@@ -1,18 +1,24 @@
-import type { Position, Dimensions } from './types';
+import type { Position, Dimensions, Solid } from './types';
 
 export interface Collidable {
   position: Position;
   dimensions: Dimensions;
-  solid?: boolean; 
+  solid?: Solid; 
 }
 
 const solids: Collidable[] = [];
 
-export function registerSolid(thing: Collidable) {
-    if (!('solid' in thing) || (thing as any).solid === true) {
-      solids.push(thing);
-    }
+export function isSolid(thing: unknown): thing is Collidable {
+  if (typeof thing !== 'object' || thing === null) return false;
+  if (!('solid' in thing) || (thing as any).solid !== true) return false;
+  if (!('position' in thing) || !('dimensions' in thing)) return false;
+  return true;
 }
+
+export function registerSolid(thing: Collidable) {
+  solids.push(thing);
+}
+
 
 export function getSolids(): readonly Collidable[] {
   return solids;
