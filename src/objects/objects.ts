@@ -11,3 +11,11 @@ export const bush = {
     render: { color: '#47734c' },
     solid: true,
 }
+
+export const shrine = {
+    position: { x: 450, y: 140 },
+    dimensions: { w: 50, h: 50 },
+    render: { color: '#8e44ad' },
+    solid: true,
+    interactable: true,
+};

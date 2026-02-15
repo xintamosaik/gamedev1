@@ -4,10 +4,17 @@ import { updateMovement } from './movement';
 import { canvas, context, renderAll } from './render';
 import levelOne from './levels/one';
 import { Background } from 'levels/types';
-import { checkCollisions } from 'collision';
+import { 
+    isSolid, 
+    registerSolid, 
+    checkCollisions, 
+    isInteractable, 
+    registerInteractable,
+    checkProximity
+} from 'collision';
 import { registerMovable } from './movement';
 import { isRenderable, registerRenderable } from './render';
-import { isSolid, registerSolid } from 'collision';
+
 
 let previousFrameTime = 0;
 const MAX_DELTA_TIME = 0.05;
@@ -18,7 +25,8 @@ const player =   {
         position: { x: 100, y: 100 },
         dimensions: { w: 50, h: 50 },
         velocity: { vx: 0, vy: 0 },
-        render: { color: '#d5a442' }
+        render: { color: '#d5a442' },
+        aura: 20,
 }
 registerMovable(player);
 registerRenderable(player);
@@ -36,6 +44,10 @@ function createLevel(descriptions: unknown[]) {
         }
         if (isSolid(thing)) {
             registerSolid(thing);
+        }
+
+        if (isInteractable(thing)) {
+            registerInteractable(thing);
         }
    
     }
@@ -63,11 +75,9 @@ function gameLoop(timestamp: number): void {
     updateMovement(deltaTime, MOVEMENT_SCALE);
   
     const collisions = checkCollisions(player.position, player.dimensions);
-    if (collisions.length > 0) {
-        player.render.color = '#f00';
-    } else {
-        player.render.color = '#d5a442';     
-    }
+    player.render.color = collisions.length > 0 ? '#f00' : '#d5a442';
+    const near = checkProximity(player.position, player.dimensions, player.aura);
+    player.render.color = near.length > 0 ? '#ff0' : player.render.color;
     drawBackground(activeLevel.background);
     renderAll();
 
