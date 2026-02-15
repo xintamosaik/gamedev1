@@ -1,4 +1,3 @@
-import type { Render, Position, Velocity, Dimensions } from './types';
 import { ID } from './things';
 import { updateInputLogic } from './input';
 import { updateMovement } from './movement';
