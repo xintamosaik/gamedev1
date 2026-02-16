@@ -15,6 +15,7 @@ import {
 import { registerMovable } from './movement';
 import { isRenderable, registerRenderable } from './render';
 
+const DEBUG = true
 
 let previousFrameTime = 0;
 const MAX_DELTA_TIME = 0.05;
@@ -75,14 +76,14 @@ function gameLoop(timestamp: number): void {
     updateMovement(deltaTime, MOVEMENT_SCALE);
   
     const collisions = checkCollisions(player.position, player.dimensions);
-    player.render.color = collisions.length > 0 ? '#f00' : '#d5a442';
+    if (DEBUG) player.render.color = collisions.length > 0 ? '#f00' : '#d5a442';
     const near = checkProximity(player.position, player.dimensions, player.aura);
-    player.render.color = near.length > 0 ? '#ff0' : player.render.color;
+    if (DEBUG) player.render.color = near.length > 0 ? '#ff0' : player.render.color;
     drawBackground(activeLevel.background);
     renderAll(near, collisions);
 
-    context.fillStyle = '#0f0';
-    context.fillText(`FPS: ${Math.round(1 / deltaTime)}`, 10, 30);
+    if (DEBUG) context.fillStyle = '#0f0';
+    if (DEBUG) context.fillText(`FPS: ${Math.round(1 / deltaTime)}`, 10, 30);
     
     previousFrameTime = timestamp;
     window.requestAnimationFrame(gameLoop);
