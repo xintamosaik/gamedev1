@@ -3,7 +3,7 @@ import { updateInputLogic } from './input';
 import { updateMovement } from './movement';
 import { canvas, context, renderAll } from './render';
 import levelOne from './levels/one';
-import { Background } from 'levels/types';
+import type { Background } from 'levels/types';
 import {
     isSolid,
     registerSolid,
