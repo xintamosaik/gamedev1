@@ -8,7 +8,7 @@ let previousFrameTime = 0;
 const keys: Record<string, boolean> = {};
 window.addEventListener('keydown', e => { keys[e.key] = true; });
 window.addEventListener('keyup', e => { keys[e.key] = false; });
-
+type Rect = { x: number; y: number; w: number; h: number };
 
 const tree = {
 	x: 200,
@@ -49,12 +49,14 @@ const player = {
 	color: '#d5a442',
 	aura: 20,
 }
-
-function collides(rect1: { x: number, y: number, w: number, h: number }, rect2: { x: number, y: number, w: number, h: number }): boolean {
-	return rect1.x < rect2.x + rect2.w &&
-		rect1.x + rect1.w > rect2.x &&
-		rect1.y < rect2.y + rect2.h &&
-		rect1.y + rect1.h > rect2.y;
+function overlapsX(a: Rect, b: Rect) {
+	return a.x < b.x + b.w && a.x + a.w > b.x;
+}
+function overlapsY(a: Rect, b: Rect) {
+	return a.y < b.y + b.h && a.y + a.h > b.y;
+}
+function collides(a: Rect, b: Rect) {
+	return overlapsX(a, b) && overlapsY(a, b);
 }
 // LOOP
 const gameObjects = [tree, bush, shrine];
@@ -77,19 +79,31 @@ function gameLoop(timestamp: number): void {
 	}
 	const step = player.speed * deltaTime;
 
-	const projection = {
-		x: player.x + player.vx * step,
-		y: player.y + player.vy * step,
-		w: player.w,
-		h: player.h,
-	};
+	player.dx = player.vx * step;
+	player.dy = player.vy * step;
 
-	const collision = gameObjects.some(rect => rect.solid && collides(projection, rect));
-
-	if (!collision) {
-		player.x = projection.x;
-		player.y = projection.y;
+	player.x += player.dx;
+	for (const obj of gameObjects) {
+		if (collides(player, obj)) {
+			if (player.vx > 0) {
+				player.x = obj.x - player.w;
+			} else if (player.vx < 0) {
+				player.x = obj.x + obj.w;
+			}
+		}
 	}
+
+	player.y += player.dy;
+	for (const obj of gameObjects) {
+		if (collides(player, obj)) {
+			if (player.vy > 0) {
+				player.y = obj.y - player.h;
+			} else if (player.vy < 0) {
+				player.y = obj.y + obj.h;
+			}
+		}
+	}
+
 
 	// RENDER
 	context.clearRect(0, 0, canvas.width, canvas.height);
