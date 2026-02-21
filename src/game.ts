@@ -59,7 +59,7 @@ function collides(a: Rect, b: Rect) {
 	return overlapsX(a, b) && overlapsY(a, b);
 }
 // LOOP
-const gameObjects = [tree, bush, shrine];
+const solids = [tree, bush, shrine];
 function gameLoop(timestamp: number): void {
 	const deltaTime = Math.min(
 		(timestamp - previousFrameTime) / 1000,
@@ -83,7 +83,7 @@ function gameLoop(timestamp: number): void {
 	player.dy = player.vy * step;
 
 	player.x += player.dx;
-	for (const obj of gameObjects) {
+	for (const obj of solids) {
 		if (collides(player, obj)) {
 			if (player.vx > 0) {
 				player.x = obj.x - player.w;
@@ -94,7 +94,7 @@ function gameLoop(timestamp: number): void {
 	}
 
 	player.y += player.dy;
-	for (const obj of gameObjects) {
+	for (const obj of solids) {
 		if (collides(player, obj)) {
 			if (player.vy > 0) {
 				player.y = obj.y - player.h;
@@ -108,7 +108,7 @@ function gameLoop(timestamp: number): void {
 	// RENDER
 	context.clearRect(0, 0, canvas.width, canvas.height);
 
-	for (const rect of [...gameObjects, player]) {
+	for (const rect of [...solids, player]) {
 		context.fillStyle = rect.color;
 		context.fillRect(rect.x, rect.y, rect.w, rect.h);
 	}
