@@ -17,7 +17,7 @@ const tree = {
 	h: 60,
 	color: '#428345',
 	solid: true,
-	responsive: false,
+	
 }
 const bush = {
 	x: 300,
@@ -90,9 +90,9 @@ function gameLoop(timestamp: number): void {
 	player.x += player.dx;
 	for (const obj of solids) {
 		if (collides(player, obj)) {
-			if (player.vx > 0) {
+			if (player.dx > 0) {
 				player.x = obj.x - player.w;
-			} else if (player.vx < 0) {
+			} else if (player.dx < 0) {
 				player.x = obj.x + obj.w;
 			}
 		}
@@ -101,9 +101,9 @@ function gameLoop(timestamp: number): void {
 	player.y += player.dy;
 	for (const obj of solids) {
 		if (collides(player, obj)) {
-			if (player.vy > 0) {
+			if (player.dy > 0) {
 				player.y = obj.y - player.h;
-			} else if (player.vy < 0) {
+			} else if (player.dy < 0) {
 				player.y = obj.y + obj.h;
 			}
 		}
