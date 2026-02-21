@@ -70,6 +70,8 @@ function gameLoop(timestamp: number): void {
 		(timestamp - previousFrameTime) / 1000,
 		MAX_DELTA_TIME
 	);
+	const oldX = player.x;
+	const oldY = player.y;
 	player.vx = 0;
 	player.vy = 0;
 	if (keys['w']) player.vy = -1;
@@ -82,26 +84,22 @@ function gameLoop(timestamp: number): void {
 		player.vy /= distance;
 	}
 	const distance = player.speed * deltaTime;
-	const projected = {
-		x: player.vx * distance,
-		y: player.vy * distance,
+	const projection = {
+		x: player.x + player.vx * distance,
+		y: player.y + player.vy * distance,
 		w: player.w,
 		h: player.h,
 	};
-	let collision = false;
-	for (const rect of gameObjects) {
-		if (collides({
-			x: player.x + projected.x,
-			y: player.y + projected.y,
-			w: player.w,
-			h: player.h
-		}, rect)) {
-			collision = true;
-			break;
-		}
+
+	const collision = gameObjects.some(rect => collides(projection, rect));
+	if (collision) {
+		player.x = oldX
+		player.y = oldY
+	} else {
+		player.x = projection.x;
+		player.y = projection.y;
 	}
-	player.x += collision ? 0 : player.vx * distance;
-	player.y += collision ? 0 : player.vy * distance;
+
 	// RENDER
 	for (const rect of [background, ...gameObjects, player]) {
 		context.fillStyle = rect.color;
