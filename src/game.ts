@@ -17,6 +17,7 @@ const tree = {
 	h: 60,
 	color: '#428345',
 	solid: true,
+	responsive: false,
 }
 const bush = {
 	x: 300,
@@ -24,17 +25,20 @@ const bush = {
 	w: 40,
 	h: 40,
 	color: '#47734c',
-	solid: true,
+	solid: false,
+	responsive: false,
 }
 const shrine = {
 	x: 450,
 	y: 140,
 	w: 50,
 	h: 50,
-	color: '#8e44ad',
 	solid: true,
-	interactable: true,
+	color: '#8e44ad',
+	responsive: false,
 };
+
+const objects = [tree, bush, shrine];
 // PLAYER
 const player = {
 	speed: 200,
@@ -59,7 +63,8 @@ function collides(a: Rect, b: Rect) {
 	return overlapsX(a, b) && overlapsY(a, b);
 }
 // LOOP
-const solids = [tree, bush, shrine];
+const solids = objects.filter(obj => obj.solid);
+const interactables = objects.filter(obj => obj.responsive !== undefined);
 function gameLoop(timestamp: number): void {
 	const deltaTime = Math.min(
 		(timestamp - previousFrameTime) / 1000,
@@ -104,12 +109,26 @@ function gameLoop(timestamp: number): void {
 		}
 	}
 
+	// INTERACTIONS
+	const auraRect: Rect = {
+		x: player.x - player.aura,
+		y: player.y - player.aura,
+		w: player.w + player.aura * 2,
+		h: player.h + player.aura * 2,
+	}
+	for (const obj of interactables) {
+		if (collides(auraRect, obj)) {
+			obj.responsive = true;
+		} else {
+			obj.responsive = false;
+		}
+	}
 
 	// RENDER
 	context.clearRect(0, 0, canvas.width, canvas.height);
 
-	for (const rect of [...solids, player]) {
-		context.fillStyle = rect.color;
+	for (const rect of [...objects, player]) {
+		context.fillStyle = 'responsive' in rect && rect.responsive === true ? '#f39c12' : rect.color;
 		context.fillRect(rect.x, rect.y, rect.w, rect.h);
 	}
 
