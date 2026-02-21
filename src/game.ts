@@ -64,14 +64,15 @@ function collides(rect1: { x: number, y: number, w: number, h: number }, rect2: 
 		rect1.y + rect1.h > rect2.y;
 }
 // LOOP
+let oldX = player.x;
+let oldY = player.y;
 const gameObjects = [tree, bush, shrine];
 function gameLoop(timestamp: number): void {
 	const deltaTime = Math.min(
 		(timestamp - previousFrameTime) / 1000,
 		MAX_DELTA_TIME
 	);
-	const oldX = player.x;
-	const oldY = player.y;
+
 	player.vx = 0;
 	player.vy = 0;
 	if (keys['w']) player.vy = -1;
@@ -105,7 +106,8 @@ function gameLoop(timestamp: number): void {
 		context.fillStyle = rect.color;
 		context.fillRect(rect.x, rect.y, rect.w, rect.h);
 	}
-
+	oldX = player.x;
+	oldY = player.y;
 	previousFrameTime = timestamp;
 	window.requestAnimationFrame(gameLoop);
 }
