@@ -9,14 +9,7 @@ const keys: Record<string, boolean> = {};
 window.addEventListener('keydown', e => { keys[e.key] = true; });
 window.addEventListener('keyup', e => { keys[e.key] = false; });
 
-// OBJECTS
-const background = {
-	color: '#111',
-	x: 0,
-	y: 0,
-	w: canvas.width,
-	h: canvas.height,
-}
+
 const tree = {
 	x: 200,
 	y: 100,
@@ -99,7 +92,9 @@ function gameLoop(timestamp: number): void {
 	}
 
 	// RENDER
-	for (const rect of [background, ...gameObjects, player]) {
+	context.clearRect(0, 0, canvas.width, canvas.height);
+
+	for (const rect of [...gameObjects, player]) {
 		context.fillStyle = rect.color;
 		context.fillRect(rect.x, rect.y, rect.w, rect.h);
 	}
