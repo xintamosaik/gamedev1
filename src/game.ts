@@ -1,8 +1,8 @@
-
+// RENDER
 const canvas = document.getElementById('game') as HTMLCanvasElement;
 const context = canvas.getContext('2d')!;
 const MAX_DELTA_TIME = 0.05;
-let previousFrameTime = 0;
+
 
 // INPUT
 const keys: Record<string, boolean> = {};
@@ -10,6 +10,7 @@ window.addEventListener('keydown', e => { keys[e.key] = true; });
 window.addEventListener('keyup', e => { keys[e.key] = false; });
 type Rect = { x: number; y: number; w: number; h: number };
 
+// OBJECTS
 const tree = {
 	x: 200,
 	y: 100,
@@ -38,7 +39,6 @@ const shrine = {
 	responsive: false,
 };
 
-const objects = [tree, bush, shrine];
 // PLAYER
 const player = {
 	speed: 200,
@@ -53,6 +53,8 @@ const player = {
 	color: '#d5a442',
 	aura: 20,
 }
+
+// COLLISION
 function overlapsX(a: Rect, b: Rect) {
 	return a.x < b.x + b.w && a.x + a.w > b.x;
 }
@@ -62,15 +64,20 @@ function overlapsY(a: Rect, b: Rect) {
 function collides(a: Rect, b: Rect) {
 	return overlapsX(a, b) && overlapsY(a, b);
 }
+
+const renderable = [tree, bush, shrine];
+const solids = [tree, shrine];
+const interactables = [bush, shrine];
+
 // LOOP
-const solids = objects.filter(obj => obj.solid);
-const interactables = objects.filter(obj => obj.responsive !== undefined);
+let previousFrameTime = performance.now();
 function gameLoop(timestamp: number): void {
 	const deltaTime = Math.min(
 		(timestamp - previousFrameTime) / 1000,
 		MAX_DELTA_TIME
 	);
 
+	// MOVEMENT
 	player.vx = 0;
 	player.vy = 0;
 	if (keys['w']) player.vy = -1;
@@ -86,7 +93,8 @@ function gameLoop(timestamp: number): void {
 
 	player.dx = player.vx * step;
 	player.dy = player.vy * step;
-
+	
+	// COLLISION
 	player.x += player.dx;
 	for (const obj of solids) {
 		if (collides(player, obj)) {
@@ -127,7 +135,7 @@ function gameLoop(timestamp: number): void {
 	// RENDER
 	context.clearRect(0, 0, canvas.width, canvas.height);
 
-	for (const rect of [...objects, player]) {
+	for (const rect of [...renderable, player]) {
 		context.fillStyle = 'responsive' in rect && rect.responsive === true ? '#f39c12' : rect.color;
 		context.fillRect(rect.x, rect.y, rect.w, rect.h);
 	}
